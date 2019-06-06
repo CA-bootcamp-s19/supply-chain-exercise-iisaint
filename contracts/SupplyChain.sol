@@ -52,11 +52,11 @@ contract SupplyChain {
     event LogReceived(uint sku);
 
   /* Create a modifer that checks if the msg.sender is the owner of the contract */
-  modifier onlyOwner () { require (msg.sender == owner); _;}
+  modifier onlyOwner () { require (msg.sender == owner, "msg.sender should be owner"); _;}
 
-  modifier verifyCaller (address _address) { require (msg.sender == _address); _;}
+  modifier verifyCaller (address _address) { require (msg.sender == _address, "verify caller failed"); _;}
 
-  modifier paidEnough(uint _price) { require(msg.value >= _price); _;}
+  modifier paidEnough(uint _price) { require(msg.value >= _price, "paid enough failed"); _;}
 
   modifier checkValue(uint _sku) {
     //refund them after pay for item (why it is before, _ checks for logic before func)
@@ -74,16 +74,16 @@ contract SupplyChain {
    Hint: What item properties will be non-zero when an Item has been added?
    */
   modifier forSale (uint _sku) {
-    require(items[_sku].seller != address(0));
-    require(items[_sku].state == State.ForSale);
+    require(items[_sku].seller != address(0), "seller is zero");
+    require(items[_sku].state == State.ForSale, "state is not for sale");
     _;
   }
 
-  modifier sold (uint _sku) { require(items[_sku].state == State.Sold); _; }
+  modifier sold (uint _sku) { require(items[_sku].state == State.Sold, "state is not sold"); _; }
 
-  modifier shipped (uint _sku) { require(items[_sku].state == State.Shipped); _; }
+  modifier shipped (uint _sku) { require(items[_sku].state == State.Shipped, "state is not shipped"); _; }
 
-  modifier received (uint _sku) { require(items[_sku].state == State.Received); _; }
+  modifier received (uint _sku) { require(items[_sku].state == State.Received, "state is not received"); _; }
 
 
   constructor() public {
